@@ -20,7 +20,7 @@ app.post('/chat', async (req, res) => {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages: [
                     { role: "system", content: systemPrompt || "You are a helpful assistant." },
                     { role: "user", content: userMessage }
