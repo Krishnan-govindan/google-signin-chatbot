@@ -103,11 +103,15 @@
       });
   });
 
-  // Chatbot send message function
+  // Attach button click event AFTER DOM is loaded
+window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('sendBtn').addEventListener('click', sendMessage);
-  document.getElementById('userInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') sendMessage();
-  });
+});
+
+// Allow pressing Enter to send message
+document.getElementById('userInput').addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') sendMessage();
+});
 
   async function sendMessage() {
     const userInput = document.getElementById('userInput').value;
