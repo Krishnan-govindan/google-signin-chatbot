@@ -16,10 +16,12 @@
     .input-box { display: flex; padding: 10px; border-top: 1px solid #ddd; }
     .input-box input { flex: 1; padding: 10px; font-size: 14px; }
     .input-box button { padding: 10px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    #googleLoginBtn { margin: 10px; padding: 10px; background: #4285F4; color: white; border: none; width: 95%; cursor: pointer; border-radius: 5px; font-size: 14px; }
   </style>
 </head>
 <body>
   <div class="container">
+    <button id="googleLoginBtn">Sign in with Google</button>
     <div class="train-box">
       <input type="text" id="trainPrompt" placeholder="Train your chatbot about your business...">
     </div>
@@ -29,6 +31,36 @@
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
+      authDomain: "signin-chatbot.firebaseapp.com",
+      projectId: "signin-chatbot",
+      storageBucket: "signin-chatbot.firebasestorage.app",
+      messagingSenderId: "873835781002",
+      appId: "1:873835781002:web:4ecee66723e43796128673"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.getElementById('googleLoginBtn').addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          alert(`Welcome ${user.displayName}`);
+        })
+        .catch((error) => {
+          console.error("Google Sign-In Error:", error);
+        });
+    });
+  </script>
 
   <script>
     let systemPrompt = "";
@@ -70,4 +102,5 @@
   </script>
 </body>
 </html>
+
 
