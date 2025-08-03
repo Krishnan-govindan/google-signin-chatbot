@@ -93,11 +93,12 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 
   <script>
     let systemPrompt = "";
-   document.getElementById('trainPrompt').addEventListener('change', async function() {
-  systemPrompt = this.value;
+  document.getElementById('trainPrompt').addEventListener('input', async function() {
+  systemPrompt = this.value.trim();
   const user = auth.currentUser;
-  if (user) {
+  if (user && systemPrompt !== "") {
     try {
+      console.log("Saving prompt:", systemPrompt);
       await setDoc(doc(db, "users", user.uid), { prompt: systemPrompt });
       console.log("✅ Prompt saved for user:", user.email);
     } catch (error) {
@@ -105,6 +106,7 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
     }
   }
 });
+
 
 
     async function sendMessage() {
