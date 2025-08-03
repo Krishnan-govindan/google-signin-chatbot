@@ -36,6 +36,8 @@
  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 
   const firebaseConfig = {
     apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
@@ -49,16 +51,32 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const db = getFirestore(app);
+
+
 
   // Detect login status and hide button
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.getElementById('googleLoginBtn').style.display = 'none';
-      console.log(`User signed in: ${user.displayName}`);
-    } else {
-      document.getElementById('googleLoginBtn').style.display = 'block';
+ onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById('googleLoginBtn').style.display = 'none';
+    console.log(`User signed in: ${user.displayName}`);
+
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        document.getElementById('trainPrompt').value = docSnap.data().prompt;
+        systemPrompt = docSnap.data().prompt;
+        console.log("✅ Loaded saved prompt for user:", user.email);
+      }
+    } catch (error) {
+      console.error("❌ Error loading prompt:", error);
     }
-  });
+  } else {
+    document.getElementById('googleLoginBtn').style.display = 'block';
+  }
+});
+
 
   document.getElementById('googleLoginBtn').addEventListener('click', () => {
     signInWithPopup(auth, provider)
@@ -75,9 +93,19 @@
 
   <script>
     let systemPrompt = "";
-    document.getElementById('trainPrompt').addEventListener('change', function() {
-      systemPrompt = this.value;
-    });
+   document.getElementById('trainPrompt').addEventListener('change', async function() {
+  systemPrompt = this.value;
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      await setDoc(doc(db, "users", user.uid), { prompt: systemPrompt });
+      console.log("✅ Prompt saved for user:", user.email);
+    } catch (error) {
+      console.error("❌ Error saving prompt:", error);
+    }
+  }
+});
+
 
     async function sendMessage() {
       const userInput = document.getElementById('userInput').value;
