@@ -20,10 +20,10 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <button id="googleLoginBtn">Sign in with Google</button>
-    <!-- ✅ Correct position -->
-    <p id="userInfo" style="text-align:center; font-size:14px; color:#333;"></p>
+<div class="container">
+  <button id="googleLoginBtn">Sign in with Google</button>
+  <p id="userInfo" style="text-align:center; font-size:14px; color:#333; margin:5px 0;"></p>
+
     
     <div class="train-box">
       <input type="text" id="trainPrompt" placeholder="Train your chatbot about your business...">
@@ -59,39 +59,34 @@
   let systemPrompt = "";
 
   // Detect login status and load saved prompt
-  onAuthStateChanged(auth, async (user) => {
-  const userInfo = document.getElementById('userInfo'); // This will show user email
+onAuthStateChanged(auth, async (user) => {
+  const userInfo = document.getElementById('userInfo');
   if (user) {
-    // Hide login button after successful login
     document.getElementById('googleLoginBtn').style.display = 'none';
 
-    // ✅ Show logged-in email on screen
+    // ✅ Always show user info immediately
     if (userInfo) {
-      userInfo.textContent = `✅ Logged in as: ${user.email}`;
+      userInfo.textContent = `✅ Logged in as: ${user.displayName || user.email}`;
     }
 
-    console.log(`User signed in: ${user.displayName}`);
-
     try {
-      // Load saved prompt for this user
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         document.getElementById('trainPrompt').value = docSnap.data().prompt || "";
         systemPrompt = docSnap.data().prompt || "";
-        console.log("✅ Loaded saved prompt for user:", user.email);
       }
     } catch (error) {
       console.error("❌ Error loading prompt:", error);
     }
   } else {
-    // Show login button and clear user info when logged out
     document.getElementById('googleLoginBtn').style.display = 'block';
     if (userInfo) {
-      userInfo.textContent = "";
+      userInfo.textContent = "❌ Not signed in";
     }
   }
 });
+
 
   // Save prompt whenever user types
   document.getElementById('trainPrompt').addEventListener('input', async function () {
