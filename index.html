@@ -33,34 +33,45 @@
   </div>
 
   <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
-      authDomain: "signin-chatbot.firebaseapp.com",
-      projectId: "signin-chatbot",
-      storageBucket: "signin-chatbot.firebasestorage.app",
-      messagingSenderId: "873835781002",
-      appId: "1:873835781002:web:4ecee66723e43796128673"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
+    authDomain: "signin-chatbot.firebaseapp.com",
+    projectId: "signin-chatbot",
+    storageBucket: "signin-chatbot.firebasestorage.app",
+    messagingSenderId: "873835781002",
+    appId: "1:873835781002:web:4ecee66723e43796128673"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-    document.getElementById('googleLoginBtn').addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          alert(`Welcome ${user.displayName}`);
-        })
-        .catch((error) => {
-          console.error("Google Sign-In Error:", error);
-        });
-    });
-  </script>
+  // Detect login status and hide button
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('googleLoginBtn').style.display = 'none';
+      console.log(`User signed in: ${user.displayName}`);
+    } else {
+      document.getElementById('googleLoginBtn').style.display = 'block';
+    }
+  });
+
+  document.getElementById('googleLoginBtn').addEventListener('click', () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        alert(`Welcome ${user.displayName}`);
+      })
+      .catch((error) => {
+        console.error("Google Sign-In Error:", error);
+      });
+  });
+</script>
+
 
   <script>
     let systemPrompt = "";
