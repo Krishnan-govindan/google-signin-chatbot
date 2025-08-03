@@ -7,6 +7,8 @@
   <style>
     body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
     .container { width: 400px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+    <p id="userInfo" style="text-align:center; font-size:14px; color:#333;"></p>
+
     .train-box { padding: 10px; border-bottom: 1px solid #ddd; }
     .train-box input { width: 100%; padding: 10px; font-size: 14px; }
     .chat-box { height: 400px; overflow-y: auto; padding: 10px; background: #fafafa; }
@@ -56,25 +58,38 @@
 
   // Detect login status and load saved prompt
   onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      document.getElementById('googleLoginBtn').style.display = 'none';
-      console.log(`User signed in: ${user.displayName}`);
+  const userInfo = document.getElementById('userInfo'); // This will show user email
+  if (user) {
+    // Hide login button after successful login
+    document.getElementById('googleLoginBtn').style.display = 'none';
 
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          document.getElementById('trainPrompt').value = docSnap.data().prompt || "";
-          systemPrompt = docSnap.data().prompt || "";
-          console.log("✅ Loaded saved prompt for user:", user.email);
-        }
-      } catch (error) {
-        console.error("❌ Error loading prompt:", error);
-      }
-    } else {
-      document.getElementById('googleLoginBtn').style.display = 'block';
+    // ✅ Show logged-in email on screen
+    if (userInfo) {
+      userInfo.textContent = `✅ Logged in as: ${user.email}`;
     }
-  });
+
+    console.log(`User signed in: ${user.displayName}`);
+
+    try {
+      // Load saved prompt for this user
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        document.getElementById('trainPrompt').value = docSnap.data().prompt || "";
+        systemPrompt = docSnap.data().prompt || "";
+        console.log("✅ Loaded saved prompt for user:", user.email);
+      }
+    } catch (error) {
+      console.error("❌ Error loading prompt:", error);
+    }
+  } else {
+    // Show login button and clear user info when logged out
+    document.getElementById('googleLoginBtn').style.display = 'block';
+    if (userInfo) {
+      userInfo.textContent = "";
+    }
+  }
+});
 
   // Save prompt whenever user types
   document.getElementById('trainPrompt').addEventListener('input', async function () {
