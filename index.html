@@ -21,8 +21,9 @@
     }
 
     html, body {
-      height: 100%;
       margin: 0;
+      padding: 0;
+      height: 100%;
       background: var(--color-bg);
       font-family: 'IBM Plex Sans', Arial, sans-serif;
       color: var(--color-secondary);
@@ -31,49 +32,19 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      min-height: 100vh;
     }
-    .container {
-      background: var(--color-bg-box);
-      border: 1px solid var(--color-border);
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(36,62,99,0.08);
-      width: 100%;
-      max-width: 700px;
-      min-height: 680px;
-      margin: 48px auto 0;
+
+    /* Fixed auth buttons in top-right corner */
+    .auth-fixed {
+      position: fixed;
+      top: 16px;
+      right: 24px;
       display: flex;
-      flex-direction: column;
-      position: relative;
+      gap: 8px;
+      z-index: 1000;
     }
-    header {
-      border-radius: 18px 18px 0 0;
-      background: var(--color-gradient);
-      color: #fff;
-      padding: 0 34px 0 34px;
-      min-height: 66px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(36,62,99,0.06);
-    }
-    .app-title {
-      font-weight: 600;
-      font-size: 1.3rem;
-      letter-spacing: -1px;
-      line-height: 1;
-    }
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    #userInfo {
-      font-size: 0.98rem;
-      font-weight: 500;
-      color: #dbeafe;
-    }
-    .btn, button {
+
+    .btn {
       border: none;
       outline: none;
       cursor: pointer;
@@ -95,23 +66,52 @@
     }
     .btn-secondary {
       background: #fff;
-      color: #dc2626;
-      border: 1px solid #dc2626;
+      color: var(--color-error);
+      border: 1px solid var(--color-error);
     }
     .btn-secondary:hover {
-      background: #dc2626;
+      background: var(--color-error);
       color: #fff;
+    }
+    .hidden { display: none !important; }
+
+    .container {
+      margin: 80px auto 0;
+      width: 100%;
+      max-width: 800px;
+      background: var(--color-bg-box);
+      border: 1px solid var(--color-border);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(36,62,99,0.08);
+      display: flex;
+      flex-direction: column;
+      min-height: 700px;
+      position: relative;
+    }
+
+    header {
+      border-radius: 18px 18px 0 0;
+      background: var(--color-gradient);
+      color: #fff;
+      padding: 0 34px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+    .app-title {
+      font-size: 1.4rem;
+      font-weight: 600;
     }
 
     main {
       flex: 1;
-      padding: 20px 34px 18px 34px;
+      padding: 20px 34px;
       display: flex;
       flex-direction: column;
       min-height: 540px;
     }
 
-    /* --- Train Agent/Business prompt UI --- */
+    /* Train prompt UI */
     .train-row {
       display: flex;
       align-items: center;
@@ -127,6 +127,7 @@
       border: none;
       border-radius: 11px;
       min-height: 48px;
+      cursor: pointer;
     }
     .train-btn:hover { filter: brightness(0.95); }
     .train-prompt-view {
@@ -137,8 +138,6 @@
       font-weight: 500;
       font-size: 1.04rem;
       padding: 13px 18px;
-      letter-spacing: -0.01em;
-      color: var(--color-secondary);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -159,47 +158,50 @@
       border: none;
       background: transparent;
       font-size: 1rem;
-      color: var(--color-secondary);
-      padding: 0 8px 0 2px;
+      padding: 0 8px;
       outline: none;
+      color: var(--color-secondary);
     }
     .train-prompt-edit .save-btn {
       background: var(--color-accent);
       color: #fff;
       min-width: 70px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
     }
     .train-prompt-edit .cancel-btn {
       background: #eee;
       color: #555;
       min-width: 72px;
+      cursor: pointer;
       border: none;
-      font-weight: 500;
+      border-radius: 8px;
+      padding: 8px 14px;
     }
     .prompt-edit-btn {
       background: transparent;
       color: var(--color-edit);
       font-size: 1.18rem;
-      margin-left: 10px;
       display: flex;
       align-items: center;
       border: none;
       cursor: pointer;
+      padding: 4px;
     }
     .prompt-edit-btn:hover { color: #7c3aed; }
-    .hidden { display: none !important; }
 
-    /* --- Chat UI --- */
+    /* Chat UI */
     .chat-box {
-      margin: 20px 0 0 0;
       flex: 1;
       background: var(--color-bg-box);
-      border-radius: 11px;
-      padding: 16px 0;
       border: 1px solid var(--color-border);
+      border-radius: 11px;
+      padding: 16px;
       overflow-y: auto;
-      min-height: 280px;
-      max-height: 390px;
-      font-size: 1rem;
+      min-height: 340px;
+      max-height: 540px;
     }
     .message {
       margin: 14px 28px;
@@ -244,10 +246,11 @@
       border-radius: 8px;
       font-weight: 600;
       font-size: 1.03rem;
+      cursor: pointer;
     }
     .input-row button:hover { filter: brightness(0.96); }
 
-    /* --- Responsive --- */
+    /* Responsive adjustments */
     @media (max-width: 600px) {
       .container {
         max-width: 100vw;
@@ -256,210 +259,201 @@
         border-radius: 0;
         border: none;
       }
-      main { padding: 18px 6px 18px 6px; }
+      main { padding: 18px 6px; }
       .chat-box {
         margin: 8px 0 0 0;
         max-height: 50vw;
         min-height: 110px;
         padding: 7px 0;
       }
-      header { border-radius: 0; padding: 0 6px; min-height: 52px; }
+      header { border-radius: 0; padding: 0 6px; height: 52px; }
     }
   </style>
 </head>
 <body>
+  <!-- Auth buttons fixed at top-right -->
+  <div class="auth-fixed">
+    <button id="googleLoginBtn" class="btn btn-primary hidden">Sign In</button>
+    <button id="signOutBtn" class="btn btn-secondary hidden">Sign Out</button>
+  </div>
+
   <div class="container">
     <header>
       <span class="app-title">AI Business Assistant</span>
-      <div class="top-actions">
-        <span id="userInfo"></span>
-        <button id="googleLoginBtn" class="btn btn-primary hidden">Sign In</button>
-        <button id="signOutBtn" class="btn btn-secondary hidden">Sign Out</button>
-      </div>
     </header>
     <main>
-      <!-- AGENT TRAIN SECTION -->
+      <!-- Train prompt section -->
       <div id="trainRow" class="train-row"></div>
-      <!-- CHAT MESSAGES -->
+      <!-- Chat messages -->
       <div id="chatBox" class="chat-box"></div>
-      <!-- USER INPUT -->
+      <!-- User input -->
       <div class="input-row">
-        <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off"/>
+        <input type="text" id="userInput" placeholder="Type a message…" autocomplete="off"/>
         <button id="sendBtn">Send</button>
       </div>
     </main>
   </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
-  authDomain: "signin-chatbot.firebaseapp.com",
-  projectId: "signin-chatbot",
-  storageBucket: "signin-chatbot.firebasestorage.app",
-  messagingSenderId: "873835781002",
-  appId: "1:873835781002:web:4ecee66723e43796128673"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVF5F78NAfjaHky0AIYMkH0lWykAUfKYQ",
+      authDomain: "signin-chatbot.firebaseapp.com",
+      projectId: "signin-chatbot",
+      storageBucket: "signin-chatbot.firebasestorage.app",
+      messagingSenderId: "873835781002",
+      appId: "1:873835781002:web:4ecee66723e43796128673"
+    };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const db = getFirestore(app);
 
-let systemPrompt = "";
-let trainEditMode = false;
+    let systemPrompt = "";
+    let trainEditMode = false;
 
-// --- TRAIN PROMPT UI LOGIC ---
-function renderTrainPrompt(prompt) {
-  const trainRow = document.getElementById('trainRow');
-  trainRow.innerHTML = "";
+    function renderTrainPrompt(prompt) {
+      const trainRow = document.getElementById('trainRow');
+      trainRow.innerHTML = "";
 
-  if (!prompt && !trainEditMode) {
-    // Show initial button
-    const btn = document.createElement('button');
-    btn.className = 'train-btn';
-    btn.innerText = 'Train your agent';
-    btn.onclick = () => { trainEditMode = true; renderTrainPrompt(""); };
-    trainRow.appendChild(btn);
-  } else if (trainEditMode) {
-    // Edit view: input + Save + Cancel
-    const editDiv = document.createElement('div');
-    editDiv.className = "train-prompt-edit";
-    const input = document.createElement('input');
-    input.type = "text";
-    input.value = prompt || "";
-    input.placeholder = "Describe your agent’s persona, expertise, etc...";
-    input.id = "trainPromptInput";
-    input.autofocus = true;
-    editDiv.appendChild(input);
+      if (!prompt && !trainEditMode) {
+        const btn = document.createElement('button');
+        btn.className = 'train-btn';
+        btn.innerText = 'Train your agent';
+        btn.onclick = () => { trainEditMode = true; renderTrainPrompt(""); };
+        trainRow.appendChild(btn);
 
-    // Save
-    const saveBtn = document.createElement('button');
-    saveBtn.innerText = "Save";
-    saveBtn.className = "save-btn";
-    saveBtn.onclick = async function() {
-      trainEditMode = false;
-      let value = input.value.trim();
-      if (value) {
-        systemPrompt = value;
-        await savePrompt(systemPrompt);
+      } else if (trainEditMode) {
+        const editDiv = document.createElement('div');
+        editDiv.className = "train-prompt-edit";
+        const input = document.createElement('input');
+        input.type = "text";
+        input.value = prompt || "";
+        input.placeholder = "Describe your agent’s persona…";
+        input.id = "trainPromptInput";
+        editDiv.appendChild(input);
+
+        const saveBtn = document.createElement('button');
+        saveBtn.innerText = "Save";
+        saveBtn.className = "save-btn";
+        saveBtn.onclick = async () => {
+          trainEditMode = false;
+          const val = input.value.trim();
+          if (val) {
+            systemPrompt = val;
+            await savePrompt(val);
+          }
+          renderTrainPrompt(systemPrompt);
+        };
+        const cancelBtn = document.createElement('button');
+        cancelBtn.innerText = "Cancel";
+        cancelBtn.className = "cancel-btn";
+        cancelBtn.onclick = () => {
+          trainEditMode = false;
+          renderTrainPrompt(systemPrompt);
+        };
+        editDiv.appendChild(saveBtn);
+        editDiv.appendChild(cancelBtn);
+        trainRow.appendChild(editDiv);
+        setTimeout(() => input.focus(), 80);
+
+      } else {
+        const viewDiv = document.createElement('div');
+        viewDiv.className = "train-prompt-view";
+        const span = document.createElement('span');
+        span.innerText = prompt;
+        viewDiv.appendChild(span);
+
+        const editBtn = document.createElement('button');
+        editBtn.className = "prompt-edit-btn";
+        editBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              d="M15.232 5.232l3.536 3.536m-2.036-1.5A2.5 2.5 0 1116.5 7.5L5 19v3h3L20.5 9.5a2.5 2.5 0 00-3.536-3.536z"/>
+          </svg>`;
+        editBtn.onclick = () => { trainEditMode = true; renderTrainPrompt(systemPrompt); };
+        viewDiv.appendChild(editBtn);
+
+        trainRow.appendChild(viewDiv);
       }
-      renderTrainPrompt(systemPrompt);
-    };
-    // Cancel
-    const cancelBtn = document.createElement('button');
-    cancelBtn.innerText = "Cancel";
-    cancelBtn.className = "cancel-btn";
-    cancelBtn.onclick = function() {
-      trainEditMode = false;
-      renderTrainPrompt(systemPrompt);
-    };
-    editDiv.appendChild(saveBtn);
-    editDiv.appendChild(cancelBtn);
-    trainRow.appendChild(editDiv);
-    setTimeout(() => input.focus(), 80); // Delay for DOM
-  } else {
-    // Show saved prompt + EDIT
-    const viewDiv = document.createElement('div');
-    viewDiv.className = "train-prompt-view";
-    const promptText = document.createElement('span');
-    promptText.innerText = prompt || "";
-    viewDiv.appendChild(promptText);
-
-    // Edit button (pencil)
-    const editBtn = document.createElement('button');
-    editBtn.className = "prompt-edit-btn";
-    editBtn.title = "Edit";
-    editBtn.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-         d="M15.232 5.232l3.536 3.536m-2.036-1.5A2.5 2.5 0 1116.5 7.5L5 19v3h3L20.5 9.5a2.5 2.5 0 00-3.536-3.536z"/>
-      </svg>`;
-    editBtn.onclick = () => { trainEditMode = true; renderTrainPrompt(systemPrompt); };
-    viewDiv.appendChild(editBtn);
-
-    trainRow.appendChild(viewDiv);
-  }
-}
-async function savePrompt(prompt) {
-  const user = auth.currentUser;
-  if (user && prompt !== "") {
-    try { await setDoc(doc(db, "users", user.uid), { prompt }); }
-    catch (error) { alert("Error saving prompt: " + error); }
-  }
-}
-
-// --- AUTH HANDLING ---
-onAuthStateChanged(auth, async (user) => {
-  const userInfo = document.getElementById('userInfo');
-  const googleLoginBtn = document.getElementById('googleLoginBtn');
-  const signOutBtn = document.getElementById('signOutBtn');
-
-  if (user) {
-    googleLoginBtn.classList.add('hidden');
-    signOutBtn.classList.remove('hidden');
-    userInfo.innerHTML = `&#x2705; <strong>${user.displayName || user.email}</strong>`;
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      systemPrompt = docSnap.exists() ? docSnap.data().prompt || "" : "";
-      renderTrainPrompt(systemPrompt);
-    } catch {
-      renderTrainPrompt("");
     }
-  } else {
-    userInfo.innerHTML = "";
-    signOutBtn.classList.add('hidden');
-    googleLoginBtn.classList.remove('hidden');
-    systemPrompt = "";
-    renderTrainPrompt("");
-  }
-});
-document.getElementById('googleLoginBtn').addEventListener('click', () => {
-  signInWithPopup(auth, provider).catch(error => alert(error.message));
-});
-document.getElementById('signOutBtn').addEventListener('click', async () => {
-  await signOut(auth);
-  systemPrompt = "";
-  renderTrainPrompt("");
-});
 
-// Initial UI (if not logged-in)
-renderTrainPrompt("");
+    async function savePrompt(prompt) {
+      const user = auth.currentUser;
+      if (user && prompt) {
+        try { await setDoc(doc(db, "users", user.uid), { prompt }); }
+        catch (e) { alert("Error saving prompt: " + e); }
+      }
+    }
 
-// --- CHAT BOT LOGIC ---
-document.getElementById('sendBtn').addEventListener('click', sendMessage);
-document.getElementById('userInput').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') sendMessage();
-});
-async function sendMessage() {
-  const userInput = document.getElementById('userInput').value;
-  if (!userInput) return;
-  displayMessage(userInput, 'user');
-  document.getElementById('userInput').value = '';
-  try {
-    const response = await fetch('https://india-therapist-chatbot.onrender.com/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userMessage: userInput, systemPrompt })
+    onAuthStateChanged(auth, async (user) => {
+      const loginBtn = document.getElementById('googleLoginBtn');
+      const outBtn = document.getElementById('signOutBtn');
+      const userInfo = document.getElementById('trainRow');
+
+      if (user) {
+        loginBtn.classList.add('hidden');
+        outBtn.classList.remove('hidden');
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          systemPrompt = snap.exists() ? snap.data().prompt || "" : "";
+        } catch {}
+        renderTrainPrompt(systemPrompt);
+      } else {
+        loginBtn.classList.remove('hidden');
+        outBtn.classList.add('hidden');
+        systemPrompt = "";
+        renderTrainPrompt("");
+      }
     });
-    const data = await response.json();
-    displayMessage(data.reply, 'bot');
-  } catch {
-    displayMessage('Error connecting to chatbot server.', 'bot');
-  }
-}
-function displayMessage(text, sender) {
-  const chatBox = document.getElementById('chatBox');
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `message ${sender}`;
-  msgDiv.textContent = text;
-  chatBox.appendChild(msgDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-</script>
+
+    document.getElementById('googleLoginBtn').addEventListener('click', () => {
+      signInWithPopup(auth, provider).catch(e => alert(e.message));
+    });
+    document.getElementById('signOutBtn').addEventListener('click', async () => {
+      await signOut(auth);
+      systemPrompt = "";
+      renderTrainPrompt("");
+    });
+
+    renderTrainPrompt("");
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('userInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    async function sendMessage() {
+      const inp = document.getElementById('userInput');
+      const val = inp.value.trim();
+      if (!val) return;
+      displayMessage(val, 'user');
+      inp.value = '';
+      try {
+        const res = await fetch('https://india-therapist-chatbot.onrender.com/chat', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ userMessage: val, systemPrompt })
+        });
+        const data = await res.json();
+        displayMessage(data.reply, 'bot');
+      } catch {
+        displayMessage('Error connecting to chatbot server.', 'bot');
+      }
+    }
+
+    function displayMessage(text, sender) {
+      const box = document.getElementById('chatBox');
+      const div = document.createElement('div');
+      div.className = `message ${sender}`;
+      div.textContent = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+  </script>
 </body>
 </html>
